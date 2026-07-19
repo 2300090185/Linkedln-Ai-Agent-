@@ -15,14 +15,15 @@ class Config:
     TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
     
     # Email settings
-    SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-    SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
+    SMTP_SERVER = os.getenv("SMTP_SERVER") or "smtp.gmail.com"
+    _port = os.getenv("SMTP_PORT")
+    SMTP_PORT = int(_port) if _port and _port.strip() else 587
     SMTP_USERNAME = os.getenv("SMTP_USERNAME")
     SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
     RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL")
     
     # Database path
-    DB_PATH = os.getenv("DB_PATH", "history/history.db")
+    DB_PATH = os.getenv("DB_PATH") or "history/history.db"
     
     # Default RSS Sources if not defined elsewhere
     DEFAULT_RSS_FEEDS = [
