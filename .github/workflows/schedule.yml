@@ -16,6 +16,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all branches and history
+
+      - name: Fetch database history
+        run: |
+          git fetch origin
+          if git show-ref --verify --quiet refs/remotes/origin/db-state; then
+            git checkout origin/db-state -- history/history.db
+            echo "Successfully loaded history database from db-state branch."
+          else
+            echo "No database branch found, starting with a clean database."
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -43,9 +55,28 @@ jobs:
 
       - name: Commit and push database changes
         run: |
+          # Save the updated database file temporarily
+          cp history/history.db history.db.tmp
+          
+          # Configure Git
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Fetch and switch to db-state branch (or create it)
+          git fetch origin
+          if git show-ref --verify --quiet refs/remotes/origin/db-state; then
+            git checkout db-state
+            git pull origin db-state
+          else
+            git checkout -b db-state
+          fi
+          
+          # Restore the updated database file
+          mkdir -p history
+          mv history.db.tmp history/history.db
+          
+          # Commit and push changes directly to the db-state branch (which is not blocked by main rulesets)
           git add history/history.db
-          # Check if there are database changes to commit
-          git diff --quiet && git diff --staged --quiet || (git commit -m "database: update history [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "database: update history [skip ci]" && git push origin db-state)
+
 
