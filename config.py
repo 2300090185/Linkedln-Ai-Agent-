@@ -5,7 +5,18 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    """Central configuration class."""
+    """
+    Central configuration class mapping the environment variables:
+    - GEMINI_API_KEY: Authentication for Gemini LLM model services.
+    - TELEGRAM_BOT_TOKEN: Bot token for manual review draft messages.
+    - TELEGRAM_CHAT_ID: Specific Telegram chat or channel ID.
+    - SMTP_SERVER: Email transfer server address (defaults to smtp.gmail.com).
+    - SMTP_PORT: Port number for secure email connection (defaults to 587).
+    - SMTP_USERNAME: Sender email address to log in and dispatch drafts.
+    - SMTP_PASSWORD: 16-character secure App Password for Gmail.
+    - RECIPIENT_EMAIL: Recipient inbox address for LinkedIn post drafts.
+    - DB_PATH: Database file path to store article deduplication history.
+    """
     
     # API Keys
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
