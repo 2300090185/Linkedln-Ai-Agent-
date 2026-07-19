@@ -2,13 +2,15 @@
 
 Welcome! We are excited that you want to help develop this project. 
 
+> [!IMPORTANT]
+> **Repository Update Policy:**
+> Only the repository owner has permission to directly update or push changes to the main repository. If you wish to contribute, you must submit a **Pull Request (PR)**. If your request is valid and passes testing, I will personally approve and merge the code into the project.
+
 ### 📝 How to Contribute & Approval Process
 1. **Fork the Repository:** Create a personal copy of this repository on your own GitHub account.
 2. **Make Changes:** Clone your fork, create a new branch, and implement your changes.
 3. **Submit a Pull Request (PR):** Submit a PR back to the main repository's `main` branch.
-4. **Owner Approval:** As the repository owner, I will review all incoming pull requests, test your contributions, and approve them before they are merged into the live project.
-
-Please review the guidelines below before starting.
+4. **Owner Review & Merge:** I will review your pull request. If the implementation is valid, I will approve it and merge the code.
 
 ---
 
