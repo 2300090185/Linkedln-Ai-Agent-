@@ -1,8 +1,14 @@
 # Contributing to AI LinkedIn Research Agent
 
-Welcome! We are excited that you want to contribute to this project. As we transition this agent into a full-stack web application, having collaborative standards helps keep our codebase clean, robust, and easy to maintain.
+Welcome! We are excited that you want to help develop this project. 
 
-Please review the following guidelines before making any changes.
+### 📝 How to Contribute & Approval Process
+1. **Fork the Repository:** Create a personal copy of this repository on your own GitHub account.
+2. **Make Changes:** Clone your fork, create a new branch, and implement your changes.
+3. **Submit a Pull Request (PR):** Submit a PR back to the main repository's `main` branch.
+4. **Owner Approval:** As the repository owner, I will review all incoming pull requests, test your contributions, and approve them before they are merged into the live project.
+
+Please review the guidelines below before starting.
 
 ---
 
