@@ -78,14 +78,19 @@ class NotificationAgent:
             
         message += f"\n<b>Draft:</b>\n{final_draft}\n"
         
-        # Try telegram first
-        if self.send_telegram(message):
-            return True
+        # Send Telegram notification if configured
+        telegram_sent = False
+        if self.telegram_token and self.telegram_chat_id and "your_telegram" not in self.telegram_token and "your_telegram" not in self.telegram_chat_id:
+            telegram_sent = self.send_telegram(message)
             
-        # Fallback to email
-        email_body = f"New LinkedIn Post Ready for Review\n\nSource Article: {article_url}\nAI Confidence: {confidence.upper()}\n"
-        if flags:
-            email_body += f"Flags: {', '.join(flags)}\n"
-        email_body += f"\nDraft:\n{final_draft}\n"
-        
-        return self.send_email("AI LinkedIn Agent: Post Ready for Review", email_body)
+        # Send Email notification if configured
+        email_sent = False
+        if all([self.smtp_server, self.smtp_port, self.smtp_username, self.smtp_password, self.recipient_email]) and "your_app_password" not in self.smtp_password:
+            email_body = f"New LinkedIn Post Ready for Review\n\nSource Article: {article_url}\nAI Confidence: {confidence.upper()}\n"
+            if flags:
+                email_body += f"Flags: {', '.join(flags)}\n"
+            email_body += f"\nDraft:\n{final_draft}\n"
+            
+            email_sent = self.send_email("AI LinkedIn Agent: Post Ready for Review", email_body)
+            
+        return telegram_sent or email_sent
