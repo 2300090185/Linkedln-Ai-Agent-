@@ -70,7 +70,15 @@ class Database:
                 return cursor.lastrowid
         except sqlite3.IntegrityError:
             logger.debug(f"Article already exists (duplicate URL or Hash): {article.url}")
-            return None
+            try:
+                with self.get_connection() as conn:
+                    cursor = conn.cursor()
+                    cursor.execute("SELECT id FROM articles WHERE url = ? OR content_hash = ?", (article.url, article.content_hash))
+                    row = cursor.fetchone()
+                    return row[0] if row else None
+            except Exception as e:
+                logger.error(f"Error fetching existing article ID: {e}")
+                return None
 
     def is_topic_recent(self, topic_hash: str, days: int = 30) -> bool:
         """Check if a topic hash exists in history within the last `days` days."""

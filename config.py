@@ -1,4 +1,5 @@
 import os
+# pyrefly: ignore [missing-import]
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -41,7 +42,11 @@ class Config:
         "https://openai.com/blog/rss.xml",
         "https://blog.google/technology/ai/rss/",
         "https://techcrunch.com/category/artificial-intelligence/feed/",
-        "https://venturebeat.com/category/ai/feed/"
+        "https://venturebeat.com/category/ai/feed/",
+        "https://techcrunch.com/feed/",
+        "https://www.theverge.com/rss/index.xml",
+        "https://www.wired.com/feed/rss",
+        "https://news.ycombinator.com/rss"
     ]
 
 # Validate crucial variables during startup

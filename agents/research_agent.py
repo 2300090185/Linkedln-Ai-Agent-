@@ -20,14 +20,6 @@ class ResearchAgent:
         new_articles = []
         
         for raw in raw_articles:
-            # Check 30-day rule for duplicate topics (using content hash for now)
-            # A more advanced version might use LLM to generate a semantic hash,
-            # but standard content hash works as a baseline for exact duplicates.
-            
-            if self.db.is_topic_recent(raw['content_hash'], days=30):
-                logger.debug(f"Article skipped (Topic recently published): {raw['title']}")
-                continue
-                
             article = Article(
                 title=raw['title'],
                 description=raw['description'],
@@ -37,11 +29,12 @@ class ResearchAgent:
                 content_hash=raw['content_hash']
             )
             
-            # Save to DB to avoid duplicate fetching later
+            # Save/retrieve from DB to get the article ID
             article_id = self.db.add_article(article)
             if article_id:
                 article.id = article_id
-                new_articles.append(article)
+                
+            new_articles.append(article)
                 
         logger.info(f"Research agent found {len(new_articles)} new unique articles.")
         return new_articles

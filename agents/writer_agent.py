@@ -11,13 +11,13 @@ class WriterAgent(LLMBaseAgent):
         self.prompt_template = self._load_prompt()
 
     def _load_prompt(self) -> str:
-        prompt_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'prompts', 'linkedin_writer.txt')
+        prompt_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'prompts', 'social_media_writer.txt')
         try:
             with open(prompt_path, 'r', encoding='utf-8') as f:
                 return f.read()
         except FileNotFoundError:
             logger.error(f"Prompt file not found at {prompt_path}")
-            return "Write a LinkedIn post based on the following analysis: {analysis}"
+            return "Write a LinkedIn and Twitter/X post based on the following analysis: {analysis}"
 
     def write_post(self, analysis: dict) -> str:
         """Drafts a LinkedIn post from the analysis."""
