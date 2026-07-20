@@ -22,11 +22,11 @@ jobs:
       - name: Fetch database history
         run: |
           git fetch origin
-          if git show-ref --verify --quiet refs/remotes/origin/db-state; then
+          if git show-ref --verify --quiet refs/remotes/origin/db-state && git cat-file -e origin/db-state:history/history.db 2>/dev/null; then
             git checkout origin/db-state -- history/history.db
             echo "Successfully loaded history database from db-state branch."
           else
-            echo "No database branch found, starting with a clean database."
+            echo "No database file found on db-state branch, starting with a clean database."
           fi
 
       - name: Set up Python
