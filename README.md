@@ -56,12 +56,15 @@ All 19 application routes compile statically with zero errors.
 
 ---
 
-## Deploying to Vercel
+## Deploying to Render
 
 1. Push your code to GitHub.
-2. Go to Vercel and create a new project.
-3. Select frontend as your root directory.
-4. Click Deploy.
+2. Go to [Render Dashboard](https://dashboard.render.com/) and create a new **Blueprint**.
+3. Connect your repository. Render will automatically detect `render.yaml` and configure the service.
+4. Set the environment variables (`GEMINI_API_KEY`, `DATABASE_URL`, `NEXT_PUBLIC_API_URL`, etc.).
+5. Click **Apply**.
+
+For complete step-by-step instructions, see [DEPLOYMENT.md](file:///c:/Users/saran/Desktop/Linkedln%20ai%20agent/DEPLOYMENT.md).
 
 ---
 

@@ -175,4 +175,4 @@ This project offers strong technical novelty for publishing an academic paper:
 We request approval from the Guide to proceed with **Phase 5**:
 1. Conducting empirical benchmark experiments (ROUGE & human evaluation).
 2. Drafting the academic research paper for conference submission.
-3. Deploying the platform live on Vercel and Railway.
+3. Deploying the platform live on Render.
