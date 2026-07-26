@@ -1,83 +1,67 @@
-# NexusAI - AI Content Intelligence & Real-World Learning Platform
+# NexusAI - Autonomous Tech Content & Learning Agent
 
-NexusAI is a full-stack platform built to automate tech news ingestion, generate ready-to-publish LinkedIn posts, track arXiv research papers, and provide interactive skill certifications with real-world project roadmaps.
+NexusAI is a full-stack web application designed to track real-world technology news, generate ready-to-publish LinkedIn posts, aggregate arXiv research papers, and provide interactive developer quizzes and learning roadmaps.
 
-Powered by Google's Gemini 2.5 Flash Engine and Next.js 14, NexusAI continuously pulls live stories from Hacker News and arXiv, synchronizing updates across all pages every 2 hours.
-
----
-
-## What NexusAI Does
-
-### Live Real-World News & Research Ingestion
-NexusAI connects directly to public APIs (Hacker News and arXiv export APIs) to pull breaking news across AI, DevOps, Cloud Computing, Cybersecurity, and Web Development. Each story is paired with relevant academic preprints, citation metrics, and direct PDF downloads.
-
-### Automatic LinkedIn Post Generation
-The platform reads the top live story from the internet every cycle and drafts a structured, fact-checked LinkedIn post. You can also generate posts on any custom topic instantly.
-
-### Interactive Quizzes & Verified Skill Certificates
-Every 2 hours, NexusAI generates a 5-question quiz based on the latest news items. Answering questions earns XP points, unlocks developer badges, and lets you generate a verified PDF certificate complete with an embedded QR verification code.
-
-### AI Implementation Roadmaps & Certification Course Links
-Each roadmap module breaks down live tech releases into step-by-step engineering implementation steps. Every module includes direct links to official certification courses on DeepLearning.AI, Google Cloud, AWS, NVIDIA DLI, and Microsoft Learn.
-
-### Fast, Zero-Latency Navigation
-With global in-memory state caching and Next.js link prefetching, switching between pages happens instantly with smooth glassmorphic UI styling.
+I built this project to solve a real problem: keeping up with fast-moving tech releases while maintaining a consistent technical personal brand on LinkedIn without spending hours every day scouring different news sites.
 
 ---
 
-## Tech Stack
+## What it does
 
-- **Frontend**: Next.js 14 (App Router), TypeScript, TailwindCSS, Lucide Icons
-- **Backend API**: FastAPI, Python 3.12, Supabase (pgvector)
-- **AI Model**: Google Gemini 2.5 Flash Engine
-- **Data Ingestion**: Hacker News API, arXiv Export API
+- Live News Ingestion: Fetches real-world top stories from Hacker News and arXiv export APIs in real time across AI, Cloud Computing, DevOps, Web Development, and Cybersecurity.
+- Ready-to-Publish Posts: Takes the top trending story from each ingestion cycle and generates a structured LinkedIn post draft tailored for software engineers.
+- arXiv Research Papers: Pairs news stories with relevant academic research preprints, author credits, citation metrics, and direct PDF downloads.
+- Interactive Quizzes & Badges: Generates 5 multiple-choice questions per cycle based on live news, awarding XP points, developer badges, and a downloadable PDF certificate with a verification QR code.
+- Project Implementation Roadmaps: Converts live news releases into step-by-step technical roadmaps with direct links to official certificate courses from Google Cloud, AWS, DeepLearning.AI, NVIDIA, and Microsoft.
+- Fast Page Navigation: Uses Next.js App Router link prefetching and in-memory global caching for instant 0ms page-to-page navigation.
 
 ---
 
-## Quick Start
+## Project Structure
 
-### Prerequisites
-Make sure you have Node.js 18+ and npm installed on your system.
+- frontend/: Next.js 14 application built with TypeScript, TailwindCSS, and Lucide Icons.
+- backend/: FastAPI Python backend powering RAG context retrieval and Gemini 2.5 Flash API calls.
+- agents/: Orchestration and multi-agent pipeline scripts.
 
-### Running Locally
+---
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/2300090185/Linkedln-Ai-Agent-.git
-   cd Linkedln-Ai-Agent-
-   ```
+## How to run it locally
 
-2. **Install dependencies and start the app**:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
+First, clone the repository to your local machine:
 
-3. **Open the platform**:
-   Visit `http://localhost:3000` in your web browser.
+git clone https://github.com/2300090185/Linkedln-Ai-Agent-.git
+cd Linkedln-Ai-Agent-
+
+Next, move into the frontend directory and install the dependencies:
+
+cd frontend
+npm install
+
+Start the Next.js development server:
+
+npm run dev
+
+Open your browser and navigate to http://localhost:3000 to interact with the dashboard.
 
 ---
 
 ## Production Build
 
-To test the production build locally:
+To verify that the application compiles cleanly for production:
 
-```bash
 cd frontend
 npm run build
-```
 
-This compiles all 19 static and dynamic routes with zero build errors.
+All 19 application routes compile statically with zero errors.
 
 ---
 
-## Deployment
+## Deploying to Vercel
 
-The application is configured for 1-click deployment on Vercel:
-1. Connect your repository to Vercel.
-2. Set the root directory to `frontend`.
-3. Click Deploy.
+1. Push your code to GitHub.
+2. Go to Vercel and create a new project.
+3. Select frontend as your root directory.
+4. Click Deploy.
 
 ---
 
