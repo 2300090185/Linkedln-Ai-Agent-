@@ -1,95 +1,105 @@
-# AI-Powered LinkedIn Research Agent
+# AI Content Intelligence Platform
 
-An autonomous AI agent built in Python that researches the latest AI & technology news, analyzes the information, and generates a professional, human-like LinkedIn post. The post is fact-checked and sent for manual approval via Telegram or Email.
+A production-ready, full-stack AI Content Intelligence Platform powered by **Next.js 14**, **FastAPI**, **PostgreSQL (Supabase)**, and **Google Gemini 2.5 Flash**.
 
-## Project Overview
+This platform helps developers, researchers, students, HR teams, content creators, and enterprise professionals stay updated with tech news, discover research papers, learn trending technologies, generate multi-platform social posts, and track learning progress with interactive analytics.
 
-This project is a production-ready, scalable AI pipeline demonstrating multi-agent workflows using Google's Gemini LLM. It focuses on high-quality content curation, preventing duplicate topics (30-day memory rule), and providing a clean, modular architecture.
+---
 
-### Features
-- **RSS Ingestion:** Fetches news from top AI sources (OpenAI, Google, TechCrunch, etc.).
-- **Duplicate Detection:** Uses an SQLite database to ensure the same topic isn't posted twice within 30 days.
-- **AI Ranking:** Ranks news based on Innovation, Enterprise Relevance, and Trend Score.
-- **AI Analysis:** Extracts key takeaways, business impact, and technical summaries.
-- **AI Writer:** Drafts a compelling, educational, and professional LinkedIn post without AI clichés.
-- **Fact-Checking Verification:** Flags potential hallucinations or low-confidence statistics.
-- **Notifications:** Delivers the draft to Telegram or Email for manual review.
+## Key Features
 
-## Architecture
+* 🚀 **Personalized Feed & Onboarding**: Multi-domain interest selection (27+ domains including AI, ML, Cloud, DevOps, Python, React, FinTech, Cybersecurity, etc.).
+* 📰 **Trusted News Aggregation**: Real-time feeds from top tech companies (OpenAI, Google AI, Microsoft, NVIDIA, Meta, Hugging Face, GitHub) and tech publishers (TechCrunch, VentureBeat, The Verge, MIT Tech Review, InfoQ).
+* 🔬 **Academic Research Discovery**: Search & explore verified research papers from arXiv, Semantic Scholar, IEEE Xplore, ACM Digital Library, DOAJ, and Crossref.
+* 🧠 **AI Learning Assistant**: 3-tier difficulty breakdowns for every article/paper (**Beginner**, **Intermediate**, **Expert Deep-Dive**), key takeaways, real-world applications, and suggested learning roadmaps.
+* ✍️ **AI Social Post Generator**: Draft high-engagement content for **LinkedIn**, **Twitter/X Threads**, **Blog Outlines**, **Newsletter Drafts**, and **Instagram Captions** across 7 writing tones (**Professional**, **Educational**, **Storytelling**, **Technical**, **Thought Leadership**, **Recruiter Friendly**, **Student Friendly**).
+* 🔍 **AI Research Assistant**: Unified multi-source search synthesizing news, papers, GitHub open-source repositories, conference talks, documentation, and books into an executive dossier.
+* 🎓 **Learning Hub & Streak Tracker**: Track completed articles, weekly reading targets, bookmarks, and active learning streaks.
+* 📊 **Analytics Dashboard**: Recharts-powered metrics for reading duration, category distribution, posts generated, and weekly activity.
+* 🛡️ **Admin Panel**: Manage RSS sources, customize AI prompt templates, review system execution logs, and post platform announcements.
+* 🔄 **Backward Compatibility**: Fully preserves the existing CLI script (`app.py`), multi-agent research pipeline (`agents/`), SQLite storage, and direct Telegram notifications.
 
-```mermaid
-graph TD
-    A[Cron/GitHub Actions] --> B[app.py]
-    B --> C[Research Agent]
-    C --> D[RSS Feeds]
-    C --> E[(SQLite DB)]
-    B --> F[Ranking Agent]
-    F --> G[Gemini LLM]
-    B --> H[Analysis Agent]
-    H --> G
-    B --> I[Writer Agent]
-    I --> G
-    B --> J[Verification Agent]
-    J --> G
-    B --> K[Notification Agent]
-    K --> L[Telegram/Email]
+---
+
+## Tech Stack
+
+* **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS, Lucide Icons, Recharts, Framer Motion
+* **Backend**: FastAPI (Python 3.12), Pydantic v2, Google Gemini 2.5 Flash (`google-genai` SDK), PyJWT, feedparser, httpx
+* **Database**: PostgreSQL (Supabase schema) with fallback to SQLite
+* **Deployment**: Vercel (Frontend), Railway/Render (Backend)
+
+---
+
+## Project Structure
+
+```
+Linkedln ai agent/
+├── backend/                      # FastAPI Web Application
+│   ├── app/
+│   │   ├── main.py               # FastAPI entrypoint
+│   │   ├── core/                 # Config & Security
+│   │   ├── services/             # Gemini 2.5 AI, News, Research services
+│   │   └── api/v1/endpoints/     # REST Endpoints
+│   └── requirements.txt
+├── frontend/                     # Next.js Dashboard Application
+│   ├── src/
+│   │   ├── app/                  # Next.js App Router pages
+│   │   ├── components/           # Sidebar, Header, ArticleModal
+│   │   └── lib/                  # API client & types
+│   └── package.json
+├── database/
+│   ├── schema.sql                # PostgreSQL / Supabase Schema
+│   └── database.py               # Preserved SQLite database client
+├── agents/                       # Preserved AI Agent pipeline modules
+├── app.py                        # Preserved CLI workflow runner
+├── DEPLOYMENT.md                 # Production deployment guide
+└── API.md                        # REST API reference
 ```
 
-## Installation
+---
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repo-url>
-   cd linkedin-ai-agent
-   ```
+## Quickstart Guide
 
-2. **Create a virtual environment:**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+### 1. Environment Setup
 
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+Copy `.env.example` to `.env` and fill in your keys:
 
-## Configuration
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_CHAT_ID=your_telegram_chat_id
+DATABASE_URL=sqlite:///./history/history.db
+JWT_SECRET=super-secret-jwt-key
+```
 
-1. Copy `.env.example` to `.env`:
-   ```bash
-   cp .env.example .env
-   ```
+### 2. Running Locally
 
-2. Fill in your environment variables:
-   - `GEMINI_API_KEY`: Get this from Google AI Studio.
-   - `TELEGRAM_BOT_TOKEN` & `TELEGRAM_CHAT_ID`: Follow the Telegram setup below.
-   - (Optional) SMTP details if you prefer email.
+#### Backend:
+```bash
+python -m venv venv
+# Windows: venv\Scripts\activate | Linux/macOS: source venv/bin/activate
+pip install -r backend/requirements.txt
+uvicorn backend.app.main:app --reload --port 8000
+```
+- **FastAPI Backend Docs**: `http://localhost:8000/docs`
 
-## Telegram Setup
+#### Frontend:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+- **Frontend Dashboard**: `http://localhost:3000`
 
-1. Message `@BotFather` on Telegram and use `/newbot` to create a bot.
-2. Copy the given HTTP API Token to `TELEGRAM_BOT_TOKEN`.
-3. Message your new bot to start a conversation.
-4. Visit `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates` in your browser.
-5. Find the `"chat": {"id": 123456789}` in the JSON response and copy the ID to `TELEGRAM_CHAT_ID`.
+### 3. Running the Legacy Autonomous Agent CLI
 
-## Running Locally
-
-Run the main orchestrator script:
 ```bash
 python app.py
 ```
-Check the `output/latest_post.md` file or your Telegram for the result!
 
-## GitHub Actions Setup
+---
 
-This agent runs automatically every 6 hours using GitHub Actions.
-1. Push your code to GitHub.
-2. Go to your repository settings -> Secrets and variables -> Actions.
-3. Add your environment variables (`GEMINI_API_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`) as Repository Secrets.
+## Documentation
 
-## Future Enhancements
-- Support for Groq/OpenAI models by extending the `LLMBaseAgent`.
-- Scraping company blogs or arXiv directly using web scraping tools.
-- Multi-language support for LinkedIn posts.
+* Refer to [DEPLOYMENT.md](file:///c:/Users/saran/Desktop/Linkedln%20ai%20agent/DEPLOYMENT.md) for Vercel, Railway, and Supabase deployment steps.
+* Refer to [API.md](file:///c:/Users/saran/Desktop/Linkedln%20ai%20agent/API.md) for REST API endpoint details.

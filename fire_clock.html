@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiery Scheduler Clock & Countdown</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #030305;
+            --fire-glow: 0 0 10px #ff3c00, 0 0 20px #ff6a00, 0 0 40px #ff9d00;
+            --countdown-glow: 0 0 10px #ffaa00, 0 0 20px #ff5500, 0 0 40px #ff2200;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Particles canvas for the fire */
+        #fireCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Vignette gradient overlay for premium depth */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, rgba(3, 3, 5, 0.95) 85%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Glassmorphic clock container */
+        .clock-container {
+            z-index: 3;
+            background: rgba(15, 10, 10, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 60, 0, 0.15);
+            border-radius: 28px;
+            padding: 40px 60px;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.9),
+                        inset 0 1px 1px rgba(255, 106, 0, 0.2);
+            text-align: center;
+            max-width: 90%;
+            width: 600px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 13px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #ff5500;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-shadow: 0 0 6px rgba(255, 85, 0, 0.3);
+        }
+
+        /* Digital clock text */
+        .time-display {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 42px;
+            letter-spacing: 2px;
+            color: #ffd6b3;
+            text-shadow: 0 0 8px rgba(255, 106, 0, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .seconds {
+            font-size: 24px;
+            color: #ffaa00;
+            margin-left: 4px;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 85, 0, 0.3), transparent);
+            margin: 24px 0;
+        }
+
+        /* Countdown display */
+        .countdown-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #ffaa00;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-shadow: 0 0 8px rgba(255, 170, 0, 0.4);
+        }
+
+        .countdown-display {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 72px;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-shadow: var(--countdown-glow);
+            margin-bottom: 16px;
+        }
+
+        .date-display {
+            font-size: 14px;
+            color: #888890;
+            letter-spacing: 1px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        .status-container {
+            margin-top: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #ff3c00;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ff3c00, 0 0 16px #ff3c00;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+                box-shadow: 0 0 12px #ff3c00, 0 0 24px #ff3c00;
+            }
+            100% {
+                transform: scale(0.9);
+                opacity: 0.6;
+            }
+        }
+
+        .status-text {
+            font-size: 12px;
+            color: #ff7700;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="fireCanvas"></canvas>
+    <div class="overlay"></div>
+
+    <div class="clock-container">
+        <!-- Current Local Time Section -->
+        <div class="section-title">Current Time</div>
+        <div class="time-display" id="clock">
+            <span id="time-str">12:00:00</span>
+            <span class="seconds" id="seconds-str">PM</span>
+        </div>
+        <div class="date-display" id="date">Monday, July 20, 2026</div>
+
+        <div class="divider"></div>
+
+        <!-- Countdown Timer Section -->
+        <div class="countdown-title">Next Scheduled Run In</div>
+        <div class="countdown-display" id="countdown">01:59:48</div>
+
+        <div class="status-container">
+            <div class="pulse-dot"></div>
+            <div class="status-text">Active Scheduler (Every 2 Hours)</div>
+        </div>
+    </div>
+
+    <script>
+        // Digital Clock and Countdown Logic
+        function updateClockAndCountdown() {
+            const now = new Date();
+            
+            // 1. Update Clock
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            
+            let displayHours = hours < 10 ? '0' + hours : hours;
+            let displayMinutes = minutes < 10 ? '0' + minutes : minutes;
+            let displaySeconds = seconds < 10 ? '0' + seconds : seconds;
+            
+            document.getElementById('time-str').textContent = `${displayHours}:${displayMinutes}`;
+            document.getElementById('seconds-str').textContent = `${displaySeconds} ${ampm}`;
+            
+            // Format Date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date').textContent = now.toLocaleDateString('en-US', options);
+
+            // 2. Calculate Next Scheduled Run (every even-numbered hour)
+            const nextRun = new Date(now);
+            const currentHour = now.getHours();
+            
+            let targetHour;
+            if (currentHour % 2 === 0) {
+                // If it is currently an even hour, check if we've passed minute 0
+                if (now.getMinutes() > 0 || now.getSeconds() > 0) {
+                    targetHour = currentHour + 2;
+                } else {
+                    targetHour = currentHour;
+                }
+            } else {
+                // If it is currently an odd hour, next run is at the next hour (which will be even)
+                targetHour = currentHour + 1;
+            }
+
+            nextRun.setHours(targetHour, 0, 0, 0);
+
+            // Calculate diff
+            let diff = nextRun - now;
+            
+            // Handle negative edge case just in case
+            if (diff < 0) {
+                diff = 0;
+            }
+
+            const diffHours = Math.floor(diff / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const diffSeconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            const timerStr = 
+                (diffHours < 10 ? '0' + diffHours : diffHours) + ':' +
+                (diffMinutes < 10 ? '0' + diffMinutes : diffMinutes) + ':' +
+                (diffSeconds < 10 ? '0' + diffSeconds : diffSeconds);
+            
+            document.getElementById('countdown').textContent = timerStr;
+        }
+
+        setInterval(updateClockAndCountdown, 1000);
+        updateClockAndCountdown();
+
+        // Canvas Particle Fire Effect
+        const canvas = document.getElementById('fireCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = width / 2 + (Math.random() - 0.5) * 500;
+                this.y = height + Math.random() * 50;
+                this.size = Math.random() * 50 + 15;
+                this.speedX = (Math.random() - 0.5) * 2.5;
+                this.speedY = -Math.random() * 4 - 1.5;
+                
+                const hue = Math.floor(Math.random() * 32) + 8; // orange to red-orange
+                this.color = `hsla(${hue}, 100%, 50%, `;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.012 + 0.004;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= this.decay;
+                
+                if (this.size > 0.5) this.size -= 0.15;
+
+                const dx = (width / 2) - this.x;
+                this.speedX += dx * 0.0008;
+
+                if (this.alpha <= 0 || this.size <= 0.5) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalCompositeOperation = 'screen';
+                ctx.beginPath();
+                const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                grad.addColorStop(0, this.color + this.alpha + ')');
+                grad.addColorStop(0.3, this.color + (this.alpha * 0.6) + ')');
+                grad.addColorStop(1, this.color + '0)');
+                ctx.fillStyle = grad;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        const particles = [];
+        const particleCount = 100;
+
+        for (let i = 0; i < particleCount; i++) {
+            const p = new Particle();
+            p.y = Math.random() * height;
+            particles.push(p);
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Subtle hot bottom glow
+            ctx.save();
+            ctx.globalCompositeOperation = 'screen';
+            const floorGrad = ctx.createLinearGradient(0, height, 0, height - 100);
+            floorGrad.addColorStop(0, 'rgba(255, 50, 0, 0.35)');
+            floorGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = floorGrad;
+            ctx.fillRect(0, height - 100, width, 100);
+            ctx.restore();
+
+            // Update & draw particles
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
