@@ -50,3 +50,16 @@ This guide outlines step-by-step instructions to deploy the full-stack platform 
    * Start Command: `npm run start`
    * Environment Variable: `NEXT_PUBLIC_API_URL` (set to your Render Backend URL + `/api/v1`).
 
+---
+
+## 3. Alternative: Deploy Frontend on Vercel
+
+If you prefer hosting the Next.js frontend on **Vercel** while keeping the FastAPI backend on **Render**:
+
+1. Log into [Vercel](https://vercel.com) and click **Add New** -> **Project**.
+2. Connect your GitHub repository.
+3. Vercel will automatically detect `vercel.json` and configure the build settings (`frontend` directory).
+4. Add the Environment Variable:
+   - `NEXT_PUBLIC_API_URL`: `https://linkedin-ai-agent-backend.onrender.com/api/v1`
+5. Click **Deploy**.
+
