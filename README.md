@@ -56,11 +56,24 @@ All 19 application routes compile statically with zero errors.
 
 ---
 
-## Deploying to Render
+## Deployment
+
+### Deploying Frontend to Vercel (Recommended for Frontend)
+
+1. Push your code to GitHub.
+2. Go to [Vercel Dashboard](https://vercel.com/new) and import your repository `Linkedln-Ai-Agent-`.
+3. Vercel automatically detects [vercel.json](file:///c:/Users/saran/Desktop/Linkedln%20ai%20agent/vercel.json) and configures the build settings.
+4. Add Environment Variable:
+   - `NEXT_PUBLIC_API_URL`: `https://linkedin-ai-agent-backend.onrender.com/api/v1`
+5. Click **Deploy**.
+
+---
+
+### Deploying to Render (Full-Stack Blueprint)
 
 1. Push your code to GitHub.
 2. Go to [Render Dashboard](https://dashboard.render.com/) and create a new **Blueprint**.
-3. Connect your repository. Render will automatically detect `render.yaml` and configure the service.
+3. Connect your repository. Render automatically reads [render.yaml](file:///c:/Users/saran/Desktop/Linkedln%20ai%20agent/render.yaml) to configure both backend & frontend web services.
 4. Set the environment variables (`GEMINI_API_KEY`, `DATABASE_URL`, `NEXT_PUBLIC_API_URL`, etc.).
 5. Click **Apply**.
 
